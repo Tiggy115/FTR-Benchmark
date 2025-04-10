@@ -13,8 +13,8 @@ from functools import cached_property
 
 import numpy as np
 import torch
-from omni.isaac.lab.assets import ArticulationCfg
-from omni.isaac.lab.assets.articulation.articulation import Articulation
+from isaaclab.assets import ArticulationCfg
+from isaaclab.assets.articulation.articulation import Articulation
 
 from ftr_envs.utils.prim import (
     find_matching_prim_paths,

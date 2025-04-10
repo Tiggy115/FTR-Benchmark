@@ -1,13 +1,13 @@
 import os
 from itertools import chain
 
-from omni.isaac.core.utils.prims import (
+from isaacsim.core.utils.prims import (
     create_prim,
     find_matching_prim_paths,
     get_prim_at_path,
 )
-from omni.isaac.core.utils.rotations import euler_angles_to_quat
-from omni.isaac.core.utils.stage import add_reference_to_stage
+from isaacsim.core.utils.rotations import euler_angles_to_quat
+from isaacsim.core.utils.stage import add_reference_to_stage
 from pxr import Usd
 
 

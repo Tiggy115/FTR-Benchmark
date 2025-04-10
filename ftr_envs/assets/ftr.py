@@ -10,10 +10,10 @@
 """
 from pathlib import Path
 
-import omni.isaac.lab.sim as sim_utils
-from omni.isaac.lab.actuators import ImplicitActuatorCfg, IdealPDActuatorCfg
-from omni.isaac.lab.assets import ArticulationCfg
-from omni.isaac.lab.sim import SimulationCfg, PhysxCfg
+import isaaclab.sim as sim_utils
+from isaaclab.actuators import ImplicitActuatorCfg, IdealPDActuatorCfg
+from isaaclab.assets import ArticulationCfg
+from isaaclab.sim import SimulationCfg, PhysxCfg
 
 
 FTR_CFG = ArticulationCfg(
@@ -89,7 +89,7 @@ FTR_CFG = ArticulationCfg(
 FTR_SIM_CFG = SimulationCfg(
     dt=1 / 100,
     render_interval=5,
-    disable_contact_processing=False,
+    #disable_contact_processing=False, # removed with Isaac Sim 2.0.2
     physx=PhysxCfg(
         min_position_iteration_count=32,
         max_velocity_iteration_count=0,

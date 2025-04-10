@@ -15,7 +15,7 @@ from . import agents, anymal_d_cfg
 
 gym.register(
     id="Isaac-Velocity-Rough-Anymal-D-v1",
-    entry_point="omni.isaac.lab.envs:ManagerBasedRLEnv",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={
         "env_cfg_entry_point": anymal_d_cfg.AnymalDRoughEnvCfg,

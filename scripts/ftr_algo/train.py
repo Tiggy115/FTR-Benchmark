@@ -15,7 +15,7 @@ from functools import partial
 from types import SimpleNamespace
 
 import numpy as np
-from omni.isaac.lab.app import AppLauncher
+from isaaclab.app import AppLauncher
 
 # add argparse arguments
 parser = argparse.ArgumentParser(description="Train an RL agent with RL-Games.")
@@ -75,11 +75,11 @@ import os
 
 import gym
 import gymnasium
-import omni.isaac.lab_tasks  # noqa: F401
+import isaaclab_tasks  # noqa: F401
 import torch
-from omni.isaac.lab.utils.dict import print_dict
-from omni.isaac.lab.utils.io import dump_yaml
-from omni.isaac.lab_tasks.utils.hydra import hydra_task_config
+from isaaclab.utils.dict import print_dict
+from isaaclab.utils.io import dump_yaml
+from isaaclab_tasks.utils.hydra import hydra_task_config
 
 import ftr_envs.tasks
 import ftr_envs.utils.omega_conf

@@ -11,17 +11,17 @@
 
 
 import math
-from omni.isaac.lab.managers import EventTermCfg as EventTerm
-import omni.isaac.lab_tasks.manager_based.locomotion.velocity.mdp as mdp
-import omni.isaac.lab.terrains as terrain_gen
-from omni.isaac.lab.terrains import TerrainImporterCfg
+from isaaclab.managers import EventTermCfg as EventTerm
+import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
+import isaaclab.terrains as terrain_gen
+from isaaclab.terrains import TerrainImporterCfg
 
-from omni.isaac.lab.terrains.terrain_generator_cfg import TerrainGeneratorCfg
-from omni.isaac.lab.utils import configclass
-from omni.isaac.lab_tasks.manager_based.locomotion.velocity.velocity_env_cfg import LocomotionVelocityRoughEnvCfg, MySceneCfg
-from omni.isaac.lab_assets.anymal import ANYMAL_D_CFG  # isort: skip
-from omni.isaac.lab.terrains.config import rough
-import omni.isaac.lab.sim as sim_utils
+from isaaclab.terrains.terrain_generator_cfg import TerrainGeneratorCfg
+from isaaclab.utils import configclass
+from isaaclab_tasks.manager_based.locomotion.velocity.velocity_env_cfg import LocomotionVelocityRoughEnvCfg, MySceneCfg
+from isaaclab_assets.robots.anymal import ANYMAL_D_CFG  # isort: skip
+from isaaclab.terrains.config import rough
+import isaaclab.sim as sim_utils
 
 ROUGH_TERRAINS_CFG = TerrainGeneratorCfg(
     size=(8.0, 8.0),

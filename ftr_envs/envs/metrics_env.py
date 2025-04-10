@@ -77,16 +77,16 @@ class MetricsEnv(Wrapper):
             pickle.dump(self.mdps, f)
 
     def record_metrics(self, obses, rewards):
-        positions = self.env.unwrapped.positions.numpy()
-        orientations = self.env.unwrapped.orientations_3.numpy()
-        lin_velocities = self.env.unwrapped.robot_lin_velocities.numpy()
-        ang_velocities = self.env.unwrapped.robot_ang_velocities.numpy()
+        positions = self.env.unwrapped.positions.cpu().numpy()
+        orientations = self.env.unwrapped.orientations_3.cpu().numpy()
+        lin_velocities = self.env.unwrapped.robot_lin_velocities.cpu().numpy()
+        ang_velocities = self.env.unwrapped.robot_ang_velocities.cpu().numpy()
         sim_time = self.env.unwrapped.current_time - self.episode_start_time
-        flippers = self.env.unwrapped.flipper_positions.numpy()
+        flippers = self.env.unwrapped.flipper_positions.cpu().numpy()
 
-        obses = obses["policy"].numpy().copy()
-        rewards = rewards.numpy().copy()
-        actions = self.env.unwrapped.actions.numpy().copy()
+        obses = obses["policy"].cpu().numpy().copy()
+        rewards = rewards.cpu().numpy().copy()
+        actions = self.env.unwrapped.actions.cpu().numpy().copy()
 
         for i in range(self.num_envs):
             x, y, z = positions[i].tolist()

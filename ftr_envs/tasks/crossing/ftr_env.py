@@ -17,15 +17,15 @@ from collections import deque
 import carb
 import einops
 import numpy as np
-import omni.isaac.lab.sim as sim_utils
+import isaaclab.sim as sim_utils
 import torch
-from omni.isaac.core.utils.rotations import euler_angles_to_quat, quat_to_euler_angles
-from omni.isaac.core.world import World
-from omni.isaac.lab.assets import ArticulationCfg
-from omni.isaac.lab.envs import DirectRLEnv, DirectRLEnvCfg, VecEnvObs, VecEnvStepReturn
-from omni.isaac.lab.scene import InteractiveSceneCfg
-from omni.isaac.lab.terrains import TerrainImporterCfg
-from omni.isaac.lab.utils import configclass
+from isaacsim.core.utils.rotations import euler_angles_to_quat, quat_to_euler_angles
+from isaacsim.core.api.world import World
+from isaaclab.assets import ArticulationCfg
+from isaaclab.envs import DirectRLEnv, DirectRLEnvCfg, VecEnvObs, VecEnvStepReturn
+from isaaclab.scene import InteractiveSceneCfg
+from isaaclab.terrains import TerrainImporterCfg
+from isaaclab.utils import configclass
 
 from ftr_envs.assets.articulation.ftr import FtrWheelArticulation
 from ftr_envs.assets.ftr import FTR_CFG, FTR_SIM_CFG
@@ -138,8 +138,8 @@ class FtrEnv(DirectRLEnv):
 
         self.forward_range = self.cfg.forward_vel_range
         self.initial_flipper_range = self.cfg.initial_flipper_range
-        self.forward_vel_commands = torch.zeros(self.num_envs, 1)
-        self.flipper_target_pos = torch.zeros(self.num_envs, self.flipper_num)
+        self.forward_vel_commands = torch.zeros(self.num_envs, 1, device=self.device)
+        self.flipper_target_pos = torch.zeros(self.num_envs, self.flipper_num, device=self.device)
         self._prepare_reset_info()
 
         self.start_positions = torch.zeros((self.num_envs, 3), device=self.device)
@@ -160,7 +160,7 @@ class FtrEnv(DirectRLEnv):
 
     def _apply_action(self):
         real_forward_vel_cmd = add_noise(torch.cat(
-            [self.forward_vel_commands, torch.zeros(self.num_envs, 1)], dim=-1
+            [self.forward_vel_commands, torch.zeros(self.num_envs, 1, device=self.device)], dim=-1
         ), std=self.baselink_drive_noise_std)
         real_flipper_cmd = add_noise(
             self._calc_comp_flipper_pos(self.flipper_target_pos),
@@ -192,10 +192,10 @@ class FtrEnv(DirectRLEnv):
 
     def _reset_idx(self, env_ids: Sequence[int]):
         super()._reset_idx(env_ids)
-        self._robot.write_root_state_to_sim(torch.zeros(len(env_ids), 13), env_ids=env_ids)
+        self._robot.write_root_state_to_sim(torch.zeros(len(env_ids), 13, device=self.device), env_ids=env_ids)
 
         reset_infos = [self._reset_info_generate() for _ in range(len(env_ids))]
-        self._robot.write_root_pose_to_sim(torch.stack([i["pose"] for i in reset_infos]), env_ids=env_ids)
+        self._robot.write_root_pose_to_sim(torch.stack([i["pose"].to(self.device) for i in reset_infos]), env_ids=env_ids)
         self.flipper_positions[env_ids, :] = torch.deg2rad(rand_range(
             self.initial_flipper_range,
             (len(env_ids), self.flipper_num),
@@ -204,9 +204,9 @@ class FtrEnv(DirectRLEnv):
         self._robot.set_all_flipper_positions(self._calc_comp_flipper_pos(self.flipper_positions))
         self.forward_vel_commands[env_ids] = rand_range(self.forward_range, (len(env_ids), 1), device=self.device)
 
-        self.start_positions[env_ids] = torch.stack([i["start_point"] for i in reset_infos])
-        self.orientations[env_ids] = torch.stack([i["start_orient"] for i in reset_infos])
-        self.target_positions[env_ids] = torch.stack([i["target_point"] for i in reset_infos])
+        self.start_positions[env_ids] = torch.stack([i["start_point"].to(self.device) for i in reset_infos])
+        self.orientations[env_ids] = torch.stack([i["start_orient"].to(self.device) for i in reset_infos])
+        self.target_positions[env_ids] = torch.stack([i["target_point"].to(self.device) for i in reset_infos])
 
         # clear history data
         for i in env_ids:
@@ -260,9 +260,9 @@ class FtrEnv(DirectRLEnv):
 
     def _get_dones(self) -> tuple[torch.Tensor, torch.Tensor]:
         self._post_physics_step()
-        self.reset_terminated = torch.zeros_like(self.reset_terminated)
-        self.reset_time_outs = torch.zeros_like(self.reset_time_outs)
-        self.reward_buf = torch.zeros(self.num_envs)
+        self.reset_terminated = torch.zeros_like(self.reset_terminated, device=self.device)
+        self.reset_time_outs = torch.zeros_like(self.reset_time_outs, device=self.device)
+        self.reward_buf = torch.zeros(self.num_envs, device=self.device)
 
         # subclass imp
         ...

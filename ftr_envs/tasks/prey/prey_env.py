@@ -15,21 +15,21 @@ from typing import Dict
 
 import einops
 import numpy as np
-import omni.isaac.lab.sim as sim_utils
-import omni.isaac.lab.terrains as terrain_gen
+import isaaclab.sim as sim_utils
+import isaaclab.terrains as terrain_gen
 import torch
-from omni.isaac.lab.assets import (
+from isaaclab.assets import (
     Articulation,
     ArticulationCfg,
     RigidObject,
     RigidObjectCfg,
 )
-from omni.isaac.lab.envs import DirectMARLEnv, DirectMARLEnvCfg
-from omni.isaac.lab.scene import InteractiveSceneCfg
-from omni.isaac.lab.sim import SimulationCfg
-from omni.isaac.lab.terrains import TerrainImporterCfg
-from omni.isaac.lab.terrains.terrain_generator_cfg import TerrainGeneratorCfg
-from omni.isaac.lab.utils import configclass
+from isaaclab.envs import DirectMARLEnv, DirectMARLEnvCfg
+from isaaclab.scene import InteractiveSceneCfg
+from isaaclab.sim import SimulationCfg
+from isaaclab.terrains import TerrainImporterCfg
+from isaaclab.terrains.terrain_generator_cfg import TerrainGeneratorCfg
+from isaaclab.utils import configclass
 
 from ftr_envs.assets.articulation.ftr import FtrWheelArticulation
 from ftr_envs.assets.ftr import FTR_CFG, FTR_SIM_CFG

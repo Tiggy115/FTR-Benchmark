@@ -11,7 +11,7 @@ import numpy as np
 import argparse
 import sys
 
-from omni.isaac.lab.app import AppLauncher
+from isaaclab.app import AppLauncher
 
 # add argparse arguments
 parser = argparse.ArgumentParser(description="Play a checkpoint of an RL agent from RL-Games.")
@@ -38,9 +38,9 @@ simulation_app = app_launcher.app
 
 """Rest everything follows."""
 import gymnasium as gym
-import omni.isaac.lab_tasks  # noqa: F401
+import isaaclab_tasks  # noqa: F401
 import torch
-from omni.isaac.lab_tasks.utils import parse_env_cfg
+from isaaclab_tasks.utils import parse_env_cfg
 
 import ftr_envs.tasks
 import ftr_envs.utils.omega_conf

@@ -13,8 +13,8 @@ from typing import Sequence
 import einops
 import numpy as np
 import torch
-from omni.isaac.lab.envs import VecEnvObs
-from omni.isaac.lab.sim import PhysxCfg
+from isaaclab.envs import VecEnvObs
+from isaaclab.sim import PhysxCfg
 
 from ftr_envs.utils.torch import add_noise
 
@@ -116,7 +116,7 @@ class CrossingEnv(FtrEnv):
     def _get_rewards(self) -> torch.Tensor:
         # shutdown reward
         self.reward_buf += 0.2 * torch.tensor(
-            [self._calculate_metrics_shutdown(i) for i in range(self.num_envs)]
+            [self._calculate_metrics_shutdown(i) for i in range(self.num_envs)], device=self.device
         ).float()
         # robot height reward
         self.reward_buf += -2 * torch.relu(
@@ -132,8 +132,8 @@ class CrossingEnv(FtrEnv):
                 ((self.orientations_3[:, 0].abs() > 0) * self.orientations_3[:, 0]) ** 2
         )
         # ang reward
-        self.reward_buf -= (torch.tensor([0.1, 0.2, 0.1]) * self.robot_ang_velocities ** 2).sum(dim=-1)
-        return self.reward_buf
+        self.reward_buf -= (torch.tensor([0.1, 0.2, 0.1], device=self.device) * self.robot_ang_velocities ** 2).sum(dim=-1)
+        return self.reward_buf.to(self.device)
 
     def _get_dones(self) -> tuple[torch.Tensor, torch.Tensor]:
         super()._get_dones()
