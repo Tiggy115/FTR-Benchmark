@@ -1,3 +1,5 @@
+from gym.spaces import Box
+
 from ftr_algo.algorithms.rl.ddpg import DDPG
 from ftr_algo.algorithms.rl.ppo import PPO
 from ftr_algo.algorithms.rl.sac import SAC
@@ -29,7 +31,7 @@ def process_sarl(args, env, cfg_train, logdir):
         is_testing=is_testing,
         print_log=learn_cfg["print_log"],
         apply_reset=False,
-        asymmetric=(env.num_states > 0),
+        asymmetric=(env.state_space.shape[0] > 0 if isinstance(env.state_space, Box) else False),
     )
 
     # ppo.test("/home/hp-3070/logs/demo/scissors/ppo_seed0/model_6000.pt")

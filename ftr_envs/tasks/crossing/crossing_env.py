@@ -53,9 +53,9 @@ def out_of_range(pos, start, target):
 @configclass
 class CrossingEnvCfg(FtrEnvCfg):
     # env
-    num_actions = 4
-    num_observations = 115
-    num_states = 0
+    action_space = 4
+    observation_space = 115
+    state_space = 0
 
 
 class CrossingEnv(FtrEnv):

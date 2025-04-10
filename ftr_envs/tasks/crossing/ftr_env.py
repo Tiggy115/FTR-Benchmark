@@ -59,9 +59,9 @@ class FtrEnvCfg(DirectRLEnvCfg):
     decimation = 5
     episode_length_s = 30
     action_scale = 100.0
-    num_actions = 1
-    num_observations = 4
-    num_states = 0
+    action_space = 1
+    observation_space = 4
+    state_space = 0
 
     # simulation
     sim = FTR_SIM_CFG
@@ -118,8 +118,8 @@ class FtrEnv(DirectRLEnv):
             self.flipper_num = int(self.flipper_num / 2)
         if self.only_front_flipper:
             self.flipper_num = int(self.flipper_num / 2)
-        self.cfg.num_actions = self.flipper_num
-        self.cfg.num_observations += (-4 + self.flipper_num)
+        self.cfg.action_space = self.flipper_num
+        self.cfg.observation_space += (-4 + self.flipper_num)
         self.track_wheel_radius = self.cfg.robot_render_config["track"]["render_radius"]
 
         super().__init__(cfg, render_mode, **kwargs)

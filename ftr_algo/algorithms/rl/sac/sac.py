@@ -74,7 +74,7 @@ class SAC:
         self.actor_critic_targ = deepcopy(self.actor_critic)
 
         self.storage = ReplayBuffer(
-            vec_env.num_envs,
+            vec_env.unwrapped.num_envs,
             self.replay_size,
             self.batch_size,
             self.num_transitions_per_env,
@@ -155,8 +155,8 @@ class SAC:
         else:
             rewbuffer = deque(maxlen=100)
             lenbuffer = deque(maxlen=100)
-            cur_reward_sum = torch.zeros(self.vec_env.num_envs, dtype=torch.float, device=self.device)
-            cur_episode_length = torch.zeros(self.vec_env.num_envs, dtype=torch.float, device=self.device)
+            cur_reward_sum = torch.zeros(self.vec_env.unwrapped.num_envs, dtype=torch.float, device=self.device)
+            cur_episode_length = torch.zeros(self.vec_env.unwrapped.num_envs, dtype=torch.float, device=self.device)
 
             reward_sum = []
             episode_length = []
@@ -235,7 +235,7 @@ class SAC:
         :param pad:
         :return:
         """
-        self.tot_timesteps += self.num_transitions_per_env * self.vec_env.num_envs
+        self.tot_timesteps += self.num_transitions_per_env * self.vec_env.unwrapped.num_envs
         self.tot_time += locs["collection_time"] + locs["learn_time"]
         iteration_time = locs["collection_time"] + locs["learn_time"]
 
@@ -249,7 +249,7 @@ class SAC:
                 self.writer.add_scalar("Episode/" + key, value, locs["it"])
                 ep_string += f"""{f'Mean episode {key}:':>{pad}} {value:.4f}\n"""
 
-        fps = int(self.num_transitions_per_env * self.vec_env.num_envs / (locs["collection_time"] + locs["learn_time"]))
+        fps = int(self.num_transitions_per_env * self.vec_env.unwrapped.num_envs / (locs["collection_time"] + locs["learn_time"]))
 
         self.writer.add_scalar("Loss/value_function", locs["mean_value_loss"], locs["it"])
         self.writer.add_scalar("Loss/surrogate", locs["mean_surrogate_loss"], locs["it"])
@@ -279,7 +279,7 @@ class SAC:
             locs["it"],
         )
 
-        # fps = int(self.num_transitions_per_env * self.vec_env.num_envs / (locs['collection_time'] + locs['learn_time']))
+        # fps = int(self.num_transitions_per_env * self.vec_env.unwrapped.num_envs / (locs['collection_time'] + locs['learn_time']))
 
         str = f" \033[1m Learning iteration {locs['it']}/{locs['num_learning_iterations']} \033[0m "
 
